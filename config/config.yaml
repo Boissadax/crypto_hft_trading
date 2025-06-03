@@ -1,0 +1,81 @@
+# Configuration for Crypto HFT Trading Strategy
+
+# Data Parameters
+data:
+  raw_data_path: "../data/raw/"
+  processed_data_path: "../data/processed/"
+  symbols: ["ETH_EUR", "XBT_EUR"]
+  
+# Feature Engineering
+features:
+  # Order book levels to consider
+  depth_levels: 10
+  
+  # Time windows for features (in seconds)
+  time_windows: [0.1, 0.5, 1.0, 2.0, 5.0]
+  
+  # Features to extract
+  extract_features:
+    - bid_ask_spread
+    - order_imbalance
+    - depth_weighted_price
+    - volume_weighted_price
+    - price_impact
+    - volatility
+    - momentum
+    - cross_correlation
+
+# Model Parameters
+models:
+  # Models to test
+  algorithms:
+    RandomForest:
+      n_estimators: [100, 200, 500]
+      max_depth: [10, 20, None]
+      min_samples_split: [2, 5, 10]
+      
+    XGBoost:
+      n_estimators: [100, 200, 500]
+      max_depth: [6, 10, 15]
+      learning_rate: [0.01, 0.1, 0.2]
+      
+    LightGBM:
+      n_estimators: [100, 200, 500]
+      max_depth: [10, 20, -1]
+      learning_rate: [0.01, 0.1, 0.2]
+      
+    SVM:
+      kernel: ['rbf', 'linear']
+      C: [0.1, 1, 10]
+      gamma: ['scale', 'auto']
+
+  # Cross-validation
+  cv_folds: 5
+  test_size: 0.2
+  
+  # Prediction horizons (in seconds)
+  prediction_horizons: [0.1, 0.5, 1.0]
+
+# Trading Strategy
+strategy:
+  # Signal thresholds
+  signal_threshold: 0.6
+  confidence_threshold: 0.7
+  
+  # Risk management
+  max_position_size: 0.1  # 10% of portfolio
+  stop_loss: 0.002        # 0.2%
+  take_profit: 0.005      # 0.5%
+  
+  # Lead-lag parameters
+  max_lag_seconds: 5.0
+  min_correlation: 0.3
+
+# Execution
+execution:
+  # Rolling window for real-time prediction
+  window_size_seconds: 1800  # 30 minutes
+  update_frequency_ms: 100   # 100ms updates
+  
+  # Minimum time between trades
+  min_trade_interval_seconds: 1.0
