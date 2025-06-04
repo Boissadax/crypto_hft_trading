@@ -1,21 +1,4 @@
-# Core scientific stack
+# Core requirements for async HFT trading pipeline
 numpy
 pandas
-scikit-learn
-matplotlib
-seaborn
-joblib
 pyyaml
-
-# ML libraries
-xgboost
-lightgbm
-
-# Jupyter
-notebook
-ipykernel
-
-# Logging
-
-# For progress bars, optional
-# tqdm

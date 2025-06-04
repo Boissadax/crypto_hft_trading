@@ -5,7 +5,7 @@ Handles asynchronous data loading and preprocessing.
 
 import pandas as pd
 import numpy as np
-from typing import Dict, List
+from typing import Dict, List, Optional
 import logging
 from pathlib import Path
 
@@ -67,6 +67,54 @@ class OrderBookDataLoader:
         self.data_cache[symbol] = df
         
         logger.info("Loaded %d records for %s", len(df), symbol)
+        return df
+    
+    def load_data(self, symbol: str, max_records: Optional[int] = None) -> pd.DataFrame:
+        """
+        Load order book data for a specific symbol with optional record limit.
+        
+        Args:
+            symbol: Symbol name (e.g., 'ETH_EUR', 'XBT_EUR')
+            max_records: Maximum number of records to load (for testing)
+            
+        Returns:
+            DataFrame with order book data
+        """
+        # Create a cache key that includes max_records
+        cache_key = f"{symbol}_{max_records or 'all'}"
+        
+        if cache_key in self.data_cache:
+            return self.data_cache[cache_key]
+            
+        file_path = self.data_path / f"{symbol}.csv"
+        if not file_path.exists():
+            raise FileNotFoundError(f"Data file not found: {file_path}")
+            
+        logger.info(f"Loading data for {symbol} (max_records: {max_records or 'unlimited'})")
+        
+        # Load data with proper types
+        df = pd.read_csv(
+            file_path,
+            dtype={
+                'price': np.float64,
+                'volume': np.float64,
+                'timestamp': np.float64,
+                'side': str,
+                'level': np.int32
+            },
+            nrows=max_records  # This limits the number of rows read
+        )
+        
+        # Convert timestamp to datetime
+        df['datetime'] = pd.to_datetime(df['timestamp'], unit='s')
+        
+        # Sort by timestamp
+        df = df.sort_values('timestamp').reset_index(drop=True)
+        
+        # Cache the data
+        self.data_cache[cache_key] = df
+        
+        logger.info(f"Loaded {len(df)} records for {symbol}")
         return df
     
     def load_all_symbols(self, symbols: List[str]) -> Dict[str, pd.DataFrame]:
