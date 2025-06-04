@@ -1,0 +1,36 @@
+# Team Member 2: Aggressive Strategy
+# Focus: High frequency, multiple positions
+
+data:
+  symbols: ['ETH_EUR', 'XBT_EUR']
+  raw_data_path: 'data/raw'
+
+features:
+  depth_levels: 10             # Deeper order book
+
+lead_lag:
+  max_lag_ms: 2000             # Longer lag window
+  min_price_change: 0.00005    # Lower threshold
+  signal_decay_ms: 8000        # Longer signals
+
+costs:
+  maker_fee: 0.0001
+  taker_fee: 0.0002
+  slippage_bps: 1.0            # Higher slippage
+
+strategy:
+  initial_capital: 100000
+  position_size: 0.15          # Aggressive 15%
+  signal_threshold: 0.3        # Lower threshold
+  max_positions: 3             # Multiple positions
+
+backtest:
+  in_sample_ratio: 0.7
+  validation_ratio: 0.15
+  out_sample_ratio: 0.15
+
+# Member 2 test parameters
+test_params:
+  name: "Aggressive_MultiPos"
+  max_records: 150000
+  time_window_ms: 200          # More data points

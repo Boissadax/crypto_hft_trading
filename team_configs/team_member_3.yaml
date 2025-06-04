@@ -1,0 +1,36 @@
+# Team Member 3: Mean Reversion Focus
+# Focus: Capture price reversions
+
+data:
+  symbols: ['ETH_EUR', 'XBT_EUR']
+  raw_data_path: 'data/raw'
+
+features:
+  depth_levels: 7
+
+lead_lag:
+  max_lag_ms: 1500
+  min_price_change: 0.0001
+  signal_decay_ms: 10000       # Very long signals for reversions
+
+costs:
+  maker_fee: 0.0001
+  taker_fee: 0.0002
+  slippage_bps: 0.7
+
+strategy:
+  initial_capital: 100000
+  position_size: 0.08          # Medium risk
+  signal_threshold: 0.4        # Medium confidence
+  max_positions: 2
+
+backtest:
+  in_sample_ratio: 0.8         # More training data
+  validation_ratio: 0.1
+  out_sample_ratio: 0.1
+
+# Member 3 test parameters
+test_params:
+  name: "MeanReversion_Focus"
+  max_records: 120000
+  time_window_ms: 100
