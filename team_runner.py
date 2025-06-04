@@ -14,7 +14,7 @@ import logging
 from datetime import datetime
 
 # Add project root to path
-project_root = Path(__file__).parent.parent
+project_root = Path(__file__).parent
 sys.path.append(str(project_root))
 
 from main import AsyncCryptoTradingPipeline
