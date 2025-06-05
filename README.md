@@ -1,300 +1,343 @@
-# Clean Async Crypto HFT Trading System
+# HFT Engine v3 - Transfer Entropy Based Trading System
 
 ## Overview
 
-This project implements a production-ready high-frequency cryptocurrency trading system focused on asynchronous event-driven order book processing. After comprehensive codebase cleanup, it now contains only the essential components for detecting lead-lag relationships between crypto pairs using correlation-based analysis, with realistic transaction cost modeling.
+This is a completely refactored High-Frequency Trading (HFT) engine focused on **Transfer Entropy-based lead-lag analysis** for cryptocurrency markets. The system uses advanced statistical methods and machine learning to identify and exploit causal relationships between cryptocurrency pairs.
 
-## 🎯 Professor Requirements Compliance
+## ✨ Fonctionnalités
 
-✅ **No synchronization into uniform time bins** - Events processed in original chronological order  
-✅ **Direct asynchronous timestamp processing** - Preserves exact microsecond timing  
-✅ **Cross-crypto lead-lag signal extraction** - Correlation-based detection on raw events  
-✅ **Proper in-sample/out-of-sample splits** - Temporal separation for robust validation  
-✅ **Realistic transaction costs** - Includes maker/taker fees, slippage, and commissions  
-✅ **Net alpha reporting** - Performance calculated after all costs  
-✅ **Sub-second HFT data handling** - Optimized for high-frequency processing  
+- **🔥 Signaux Sub-Seconde**: Détection de patterns lead-lag entre cryptos
+- **⚡ Traitement Optimisé**: Streaming de données sans limite mémoire
+- **💾 Cache Intelligent**: Conversion CSV→Parquet avec détection de changements
+- **📊 Analytics Avancés**: Métriques de performance professionnelles
+- **🎯 Stratégie Lead-Lag**: Algorithme optimisé pour corrélations crypto
 
-## 🏗️ Clean Architecture
-
-### Async Pipeline (`main.py`) - 3,662 lines total
+## 🏗️ Architecture Simplifiée
 
 ```
-Raw Order Book Data
-        ↓
-Event Stream Processor
-        ↓
-```
-Raw Order Book Data
-        ↓
-Event Stream Processor
-        ↓
-Correlation-Based Lead-Lag Detection
-        ↓
-Async Trading Strategy
-        ↓
-Transaction Cost Analysis
-        ↓
-Net Alpha Calculation
+📊 Données CSV → 🔄 Moteur HFT → 📈 Stratégie Lead-Lag → 📊 Résultats
 ```
 
-### Core Components (Production-Ready)
+**Composants Essentiels:**
+- **OptimizedTradingEngine**: Moteur de trading principal
+- **OptimizedLeadLagStrategy**: Stratégie de corrélation crypto
+- **OptimizedDataHandler**: Gestion optimisée des données
+- **PerformanceTracker**: Suivi des performances
 
-#### 1. `AsyncEventProcessor` 
-- Converts order book snapshots to chronological event stream
-- Preserves exact timing without interpolation
-- Handles microsecond precision data
+## 🚀 Utilisation Rapide
 
-#### 2. `AsyncLeadLagDetector`
-- Correlation-based lead-lag detection on raw events
-- No temporal binning or synchronization required
-- Real-time pattern recognition
+### 1. Installation
 
-#### 3. `AsyncTradingStrategy`
-- Event-driven signal processing
-- Realistic transaction cost modeling
-- Position management with proper risk controls
-
-#### 4. `TransactionCosts`
-- Maker/taker fee modeling (0.25% taker, 0.1% maker)
-- Market impact and slippage calculation
-- Minimum commission handling
-
-## 📊 Codebase Cleanup Results
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| **Total Lines** | 5,000+ | 3,662 | -27% reduction |
-| **Dependencies** | 15+ packages | 3 core | -80% reduction |
-| **Approach** | Mixed ML/Sync/Async | Pure Async | Focused |
-| **Data Loss** | ~15% due to interpolation | 0% - all events preserved |
-| **Precision** | 100ms resolution | Microsecond precision |
-| **Lead-Lag** | On interpolated data | On real market events |
-| **Compliance** | ❌ Violates requirements | ✅ Meets all requirements |
-
-## 🚀 Quick Start
-
-### 1. Install Dependencies
 ```bash
-pip install pandas numpy scipy pyyaml matplotlib
+pip install -r requirements.txt
 ```
 
-### 2. Configure System
-Edit `config/async_config.yaml`:
-```yaml
-data:
-  symbols: ['ETH_EUR', 'XBT_EUR']
-  raw_data_path: 'data/raw'
+### 2. Lancement du Notebook
 
-costs:
-  maker_fee: 0.0001    # 0.01%
-  taker_fee: 0.0002    # 0.02%
-  slippage_bps: 0.5    # 0.5 bps
-
-strategy:
-  initial_capital: 100000
-  signal_threshold: 0.5
-```
-
-### 3. Run Complete Pipeline
 ```bash
-python async_main.py
+jupyter notebook HFT_Algorithm_Analysis.ipynb
 ```
 
-### 4. Compare Approaches
+### 3. Exécution Simple
+
 ```bash
-python comparison_demo.py
+python simple_main.py
 ```
 
-## 📁 Project Structure
+## 📊 Format des Données
 
-```
-crypto_hft_trading/
-├── async_processing/           # New asynchronous modules
-│   ├── event_processor.py     # Event stream processing
-│   ├── lead_lag_detector.py   # Async lead-lag detection
-│   └── async_strategy.py      # Event-driven trading
-├── async_main.py              # New main pipeline
-├── comparison_demo.py         # Sync vs Async comparison
-├── config/
-│   └── async_config.yaml     # Configuration file
-├── data_processing/           # Legacy modules (reference)
-├── results/                   # Output directory
-└── README.md                  # This file
+Vos fichiers CSV doivent contenir les colonnes suivantes:
+
+```csv
+timestamp,price,volume,side,level
+2024-01-01 09:00:00.000,50000.50,1.5,bid,1
+2024-01-01 09:00:00.000,50000.75,2.0,ask,1
 ```
 
-## 🔬 Methodology
+**Colonnes requises:**
+- `timestamp`: Horodatage des événements
+- `price`: Prix de l'ordre (float)  
+- `volume`: Volume de l'ordre (float)
+- `side`: 'bid' ou 'ask'
+- `level`: Niveau du carnet (1=meilleur, 2=second, etc.)
 
-### 1. Event Stream Creation
-- Order book snapshots → chronological events
-- Price, spread, volume changes detected
-- Exact timing preserved (no interpolation)
+## 📁 Structure du Projet
 
-### 2. Lead-Lag Detection
-- Event-driven correlation analysis
-- Price movement propagation tracking
-- Confidence scoring based on timing/magnitude
+```
+hft_engine_v3/
+├── HFT_Algorithm_Analysis.ipynb    # 📓 Notebook principal
+├── simple_main.py                  # 🚀 Point d'entrée simple
+├── core/                          # 🏗️ Moteur de trading
+├── data/                          # 📊 Gestion des données  
+├── strategies/                    # 🎯 Stratégies de trading
+├── portfolio/                     # 💰 Gestion du portefeuille
+├── execution/                     # ⚡ Exécution des ordres
+├── events/                        # 📡 Système d'événements
+├── utils/                         # 🔧 Utilitaires
+└── raw_data/                      # 📂 Données brutes
+```
 
-### 3. Signal Generation
-- Real-time pattern recognition
-- Multi-feature analysis (price, spread, volume)
-- Lag timing in microseconds
+## 🎯 Utilisation du Notebook
 
-### 4. Trading Strategy
-- Signal threshold filtering
-- Position sizing based on confidence
-- Market order execution simulation
+Le notebook `HFT_Algorithm_Analysis.ipynb` permet une analyse interactive complète:
 
-### 5. Transaction Cost Modeling
+1. **Configuration**: Paramètres de l'algorithme
+2. **Préparation**: Cache optimisé des données
+3. **Backtest**: Exécution de la stratégie lead-lag
+4. **Analyse**: Métriques de performance détaillées
+5. **Visualisation**: Graphiques des résultats
+6. **Recommandations**: Optimisations suggérées
+
+## 🎯 Paramètres de la Stratégie Lead-Lag
+
 ```python
-# Realistic cost structure
-costs = TransactionCosts(
-    maker_fee=0.0001,      # 1 bp maker
-    taker_fee=0.0002,      # 2 bp taker  
-    slippage_bps=0.5,      # 0.5 bp slippage
-    min_commission=0.01    # $0.01 minimum
+strategy = OptimizedLeadLagStrategy(
+    symbols=['ETH', 'BTC'],
+    lookback_window_ms=1000,     # Fenêtre d'analyse (1 seconde)
+    signal_threshold=0.6,        # Seuil de signal (60%)
+    max_position_size=0.1,       # Taille max de position (10%)
+    min_spread_threshold=0.001   # Spread minimum (0.1%)
 )
 ```
 
-### 6. Temporal Validation
-- 70% in-sample period (pattern detection)
-- 15% validation period (parameter optimization)  
-- 15% out-of-sample period (final testing)
-
-## 📈 Performance Metrics
-
-### Trading Performance
-- **Net Return**: After all transaction costs
-- **Net Alpha**: Excess return after costs  
-- **Sharpe Ratio**: Risk-adjusted returns
-- **Maximum Drawdown**: Peak-to-trough loss
-- **Win Rate**: Percentage of profitable trades
-
-### Cost Analysis
-- **Total Commissions**: Maker/taker fees paid
-- **Total Slippage**: Market impact costs
-- **Cost Ratio**: Total costs / capital
-- **Cost per Trade**: Average transaction cost
-
-### Signal Quality
-- **Detection Rate**: Signals per hour
-- **Confidence Distribution**: Signal strength analysis
-- **Lag Timing**: Average lead-lag delays
-- **Feature Performance**: Price vs spread vs volume signals
-
-## 📋 Sample Output
+## 📊 Résultats Exemple
 
 ```
-=== ASYNC CRYPTO HFT BACKTEST RESULTS ===
+🏆 RÉSULTATS LEAD-LAG CRYPTO
+============================================================
+⏱️  Temps d'exécution: 45.67 secondes
+📊 Événements traités: 2,500,000 à 54,742 evt/sec
 
-Initial Capital: $100,000.00
-Final Value: $103,250.00
-Net P&L: $3,250.00
-Net Return: 3.25%
-Net Alpha (after costs): 3.25%
-Sharpe Ratio: 1.847
-Maximum Drawdown: -1.2%
-Number of Trades: 127
-Total Transaction Costs: $485.20
-Cost Ratio: 0.485%
+📈 Performance de la Stratégie:
+----------------------------------------
+Rendement total:     +15.42%
+Ratio de Sharpe:     1.234
+Drawdown maximum:    -3.21%
+Nombre de trades:    1,245
 
-Lead-Lag Signals Detected: 1,247
-Average Signal Confidence: 0.623
-Average Lag Time: 47.3ms
-Price Signals: 45%, Spread: 32%, Volume: 23%
+🥇 Stratégie Lead-Lag optimisée pour corrélations crypto
 ```
 
-## 🔧 Configuration Options
+## ⚙️ Optimisation
 
-### Lead-Lag Detection
-```yaml
-lead_lag:
-  max_lag_ms: 1000           # Maximum lag (1 second)
-  min_price_change: 0.0001   # 0.01% minimum move
-  signal_decay_ms: 5000      # Signal timeout
+### Configuration Haute Performance
+
+```python
+config = OptimizedEngineConfig(
+    batch_size=10000,           # Batches plus larges
+    enable_logging=False,       # Désactiver logs
+    chunk_size=50000           # Chunks plus grands
+)
 ```
 
-### Risk Management  
-```yaml
-strategy:
-  position_size: 0.1         # 10% of capital
-  max_positions: 2           # Concurrent positions
-  signal_threshold: 0.5      # 50% confidence minimum
+## 🔧 Support
+
+Pour toute question sur l'algorithme, consultez le notebook interactif ou les commentaires dans le code.
+
+---
+
+**Algorithme Lead-Lag Optimisé pour Trading Crypto** 🚀
+
+## Key Features
+
+### 🔬 Statistical Analysis
+- **Transfer Entropy Analysis**: Comprehensive TE calculation with multiple methods
+- **Causality Testing**: Granger causality, VAR causality, and nonlinear causality tests
+- **Cross-Correlation Analysis**: Time-domain, frequency-domain, and dynamic correlations
+- **Regime Detection**: HMM-based regime detection and structural break analysis
+
+### 🤖 Machine Learning Integration
+- **Data Preparation**: Temporal data splitting with no look-ahead bias
+- **Feature Engineering**: Causality-based feature creation from synchronized data
+- **Model Training**: Ensemble methods with Transfer Entropy features
+- **Model Validation**: Comprehensive backtesting with statistical significance
+
+### 📊 Benchmarking Framework
+- **Performance Metrics**: Risk-adjusted returns (Sharpe, Sortino, Calmar)
+- **Baseline Strategies**: Buy & Hold, Random, Momentum, Mean Reversion
+- **Backtesting Engine**: Event-driven architecture with transaction costs
+- **Statistical Testing**: Significance tests and performance comparison
+
+### 🎯 Trading Strategy
+- **Transfer Entropy Strategy**: Main strategy using lead-lag relationships
+- **Multi-Symbol Support**: Simultaneous analysis of multiple cryptocurrency pairs
+- **Regime Awareness**: Adaptive behavior based on market regime detection
+- **Risk Management**: Position sizing and portfolio management
+
+## Project Structure
+
+```
+hft_engine_v3/
+├── statistical_analysis/          # Statistical methods and analysis
+│   ├── transfer_entropy.py       # Transfer Entropy calculations
+│   ├── causality_tests.py        # Granger and VAR causality tests
+│   ├── correlation_analysis.py   # Cross-correlation analysis
+│   └── regime_detection.py       # Market regime detection
+├── feature_engineering/           # Data processing and feature creation
+│   ├── order_book_features.py    # Order book feature extraction
+│   ├── synchronization.py        # Asynchronous data synchronization
+│   └── time_series_features.py   # Time series feature engineering
+├── learning/                      # Machine learning pipeline
+│   ├── data_preparation.py       # Data preparation and splitting
+│   └── model_training.py         # Model training and validation
+├── benchmark/                     # Benchmarking and performance analysis
+│   ├── strategies.py             # Baseline benchmark strategies
+│   ├── metrics.py                # Performance metrics calculation
+│   └── backtesting.py            # Backtesting engine
+├── strategy/                      # Main trading strategies
+│   └── transfer_entropy_strategy.py  # Transfer Entropy strategy
+├── notebooks/                     # Research and analysis notebooks
+├── data_cache/                    # Cached data files
+├── raw_data/                      # Raw market data
+├── processed_data/                # Processed datasets
+├── results/                       # Analysis results and outputs
+├── logs/                          # System logs
+└── models/                        # Trained ML models
 ```
 
-### Backtesting
-```yaml
-backtest:
-  in_sample_ratio: 0.7       # 70% training
-  validation_ratio: 0.15     # 15% validation
-  out_sample_ratio: 0.15     # 15% testing
+## Installation
+
+1. **Clone the repository**:
+```bash
+git clone <repository-url>
+cd hft_engine_v3
 ```
 
-## 🧪 Validation
+2. **Install dependencies**:
+```bash
+pip install -r requirements.txt
+```
 
-### Academic Compliance
-- ✅ No artificial data synchronization
-- ✅ Preserves market microstructure
-- ✅ Event-driven lead-lag analysis
-- ✅ Proper temporal cross-validation
-- ✅ Realistic cost modeling
+3. **Run the main analysis**:
+```bash
+python main.py
+```
 
-### Computational Efficiency
-- Processes 100K+ events per second
-- Memory-efficient event streaming
-- Optimized signal detection algorithms
-- Scalable to multiple crypto pairs
+## Usage
 
-## 📊 Data Requirements
+### Quick Start
 
-### Input Format
-Order book CSV files with columns:
-- `datetime`: Timestamp (microsecond precision)
-- `bid_price_1` to `bid_price_5`: Bid prices by level
-- `ask_price_1` to `ask_price_5`: Ask prices by level  
-- `bid_quantity_1` to `bid_quantity_5`: Bid quantities
-- `ask_quantity_1` to `ask_quantity_5`: Ask quantities
+```python
+from statistical_analysis import TransferEntropyAnalyzer
+from strategy import TransferEntropyStrategy
+from benchmark import BacktestEngine
 
-### Supported Exchanges
-- Kraken Pro (native format)
-- Binance (with conversion)
-- Coinbase Pro (with conversion)
-- Any exchange with L2 order book data
+# Initialize components
+te_analyzer = TransferEntropyAnalyzer()
+strategy = TransferEntropyStrategy(['BTC', 'ETH'])
+backtest_engine = BacktestEngine()
 
-## 🎓 Academic Context
+# Run analysis
+results = backtest_engine.run_backtest(strategy, data)
+```
 
-This implementation addresses common issues in HFT research:
+### Research Workflow
 
-1. **Temporal Synchronization Bias**: Most academic studies synchronize asynchronous data to uniform time grids, losing crucial timing information for lead-lag analysis.
+1. **Data Analysis**: Start with `notebooks/1_transfer_entropy_analysis.ipynb`
+2. **Statistical Validation**: Use `notebooks/2_statistical_validation.ipynb`
+3. **Feature Engineering**: Explore `notebooks/3_feature_engineering_analysis.ipynb`
+4. **ML Pipeline**: Develop models in `notebooks/4_machine_learning_pipeline.ipynb`
+5. **Strategy Development**: Test strategies in `notebooks/5_strategy_development.ipynb`
+6. **Full Backtesting**: Complete analysis in `notebooks/6_comprehensive_backtesting.ipynb`
 
-2. **Transaction Cost Underestimation**: Many papers ignore realistic market impact, slippage, and fee structures.
+## Key Components
 
-3. **Look-Ahead Bias**: Improper temporal splits can leak future information into historical analysis.
+### Transfer Entropy Analysis
+The system calculates Transfer Entropy between cryptocurrency pairs to identify lead-lag relationships:
 
-4. **Microstructure Artifacts**: Linear interpolation creates artificial price movements that don't reflect true market dynamics.
+```python
+from statistical_analysis import TransferEntropyAnalyzer
 
-This system preserves the authentic characteristics of high-frequency market data while providing a robust framework for academic research.
+analyzer = TransferEntropyAnalyzer()
+te_result = analyzer.calculate_transfer_entropy(
+    leader_data, follower_data, max_lag=5
+)
+```
 
-## 🤝 Contributing
+### Statistical Validation
+Comprehensive statistical testing ensures the reliability of identified relationships:
+
+```python
+from statistical_analysis import CausalityTester
+
+tester = CausalityTester()
+causality_result = tester.granger_causality_test(data, max_lag=5)
+```
+
+### Machine Learning Integration
+The system uses ML models to refine trading signals:
+
+```python
+from learning import DataPreparator, ModelTrainer
+
+preparator = DataPreparator()
+trainer = ModelTrainer()
+
+# Prepare data with temporal splitting
+X, y = preparator.prepare_features_targets(features, targets)
+
+# Train ensemble models
+model = trainer.train_model(X, y, model_type='random_forest')
+```
+
+### Benchmarking
+Comprehensive performance evaluation against baseline strategies:
+
+```python
+from benchmark import BacktestEngine, BuyHoldStrategy
+
+engine = BacktestEngine()
+baseline = BuyHoldStrategy('BTC')
+
+results = engine.compare_strategies([strategy, baseline], data)
+```
+
+## Performance Metrics
+
+The system provides comprehensive performance analysis:
+
+- **Risk-Adjusted Returns**: Sharpe, Sortino, Calmar ratios
+- **Drawdown Analysis**: Maximum drawdown and recovery periods
+- **Trading Metrics**: Win rate, profit factor, trade frequency
+- **Statistical Significance**: T-tests, Jarque-Bera, Ljung-Box tests
+- **Causality Metrics**: Transfer Entropy values, p-values, confidence levels
+
+## Configuration
+
+Key parameters can be adjusted in the strategy initialization:
+
+```python
+strategy = TransferEntropyStrategy(
+    symbols=['BTC', 'ETH', 'LTC'],
+    te_threshold=0.1,              # Minimum TE for signals
+    confidence_threshold=0.6,       # Minimum confidence for trades
+    lookback_window=100,           # Analysis window size
+    rebalance_frequency=50,        # TE recalculation frequency
+    use_ml=True,                   # Enable ML refinement
+    use_regime_detection=True      # Enable regime detection
+)
+```
+
+## Research Papers and Methods
+
+The system implements methods from cutting-edge research in:
+
+- **Transfer Entropy**: Schreiber (2000), Marschinski & Kantz (2002)
+- **Causality Testing**: Granger (1969), Geweke (1982)
+- **Regime Detection**: Hamilton (1989), Bai & Perron (2003)
+- **High-Frequency Trading**: Aldridge (2013), Narang (2013)
+
+## Contributing
 
 1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+2. Create a feature branch
+3. Add comprehensive tests
+4. Submit a pull request
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 📞 Contact
+## Disclaimer
 
-For questions about the implementation or academic applications:
-- Email: [your.email@university.edu]
-- LinkedIn: [Your Profile]
-- ResearchGate: [Your Profile]
-
-## 🙏 Acknowledgments
-
-- Professor [Name] for the rigorous requirements
-- [University Name] for computational resources
-- Open source community for foundational libraries
+This software is for educational and research purposes only. Cryptocurrency trading involves substantial risk of loss and is not suitable for all investors. Past performance does not guarantee future results.
