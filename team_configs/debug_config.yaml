@@ -1,0 +1,36 @@
+# Team Member 1: DEBUG Strategy
+# Focus: Debugging signal detection with relaxed thresholds
+
+data:
+  symbols: ['ETH_EUR', 'XBT_EUR']
+  raw_data_path: 'data/raw'
+
+features:
+  depth_levels: 5
+
+lead_lag:
+  max_lag_ms: 2000             # Extended lag window
+  min_price_change: 0.00001    # Much lower threshold (0.001%)
+  signal_decay_ms: 5000        # Longer decay
+
+costs:
+  maker_fee: 0.0001
+  taker_fee: 0.0002
+  slippage_bps: 0.5
+
+strategy:
+  initial_capital: 100000
+  position_size: 0.05          
+  signal_threshold: 0.2        # Much lower threshold (20%)
+  max_positions: 1             
+
+backtest:
+  in_sample_ratio: 0.7
+  validation_ratio: 0.15
+  out_sample_ratio: 0.15
+
+# Debug test parameters
+test_params:
+  name: "Debug_Relaxed"
+  max_records: 50000           # Smaller dataset for testing
+  time_window_ms: 100          # Standard frequency

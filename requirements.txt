@@ -1,0 +1,4 @@
+# Core requirements for async HFT trading pipeline
+numpy
+pandas
+pyyaml

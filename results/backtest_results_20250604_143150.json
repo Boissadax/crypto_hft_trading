@@ -1,0 +1,67 @@
+{
+  "temporal_splits": {
+    "in_sample_start": "2025-05-29T03:16:14.411006927",
+    "in_sample_end": "2025-05-29T09:57:53.875171927",
+    "validation_start": "2025-05-29T09:57:53.875171927",
+    "validation_end": "2025-05-29T11:23:58.046064927",
+    "out_sample_start": "2025-05-29T11:23:58.046064927",
+    "out_sample_end": "2025-05-29T12:50:02.216957092"
+  },
+  "in_sample_analysis": {
+    "signal_count": 0,
+    "signal_stats": {}
+  },
+  "validation_results": {
+    "best_threshold": 0.3,
+    "best_sharpe": -Infinity,
+    "optimization_results": []
+  },
+  "out_of_sample_results": {
+    "initial_capital": 100000,
+    "final_value": 100000,
+    "gross_pnl": 0.0,
+    "net_pnl": 0,
+    "gross_return": 0.0,
+    "net_return": 0.0,
+    "net_alpha": 0.0,
+    "sharpe_ratio": 0.0,
+    "max_drawdown": 0.0,
+    "total_commissions": 0.0,
+    "total_slippage": 0.0,
+    "total_transaction_costs": 0.0,
+    "cost_ratio": 0.0,
+    "num_trades": 0,
+    "avg_trade_value": 0,
+    "win_rate": 0,
+    "portfolio_values": [
+      [
+        "2025-05-29 12:19:32.840914965",
+        100000
+      ],
+      [
+        "2025-05-29 12:50:02.216957092",
+        100000
+      ]
+    ],
+    "trades_log": [],
+    "signal_performance": []
+  },
+  "strategy_performance": {
+    "total_return": 0.0,
+    "annualized_return": 0.0,
+    "volatility": 0.0,
+    "sharpe_ratio": 0.0,
+    "max_drawdown": 0.0,
+    "win_rate": 0,
+    "profit_factor": 0.0,
+    "calmar_ratio": Infinity
+  },
+  "transaction_cost_analysis": {
+    "total_commissions": 0.0,
+    "total_slippage": 0.0,
+    "total_costs": 0.0,
+    "cost_ratio": 0.0,
+    "cost_per_trade": 0.0,
+    "net_alpha_after_costs": 0.0
+  }
+}
