@@ -67,6 +67,7 @@ class AsyncCryptoTradingPipeline:
         
         # Async processing components
         symbols = self.config['data']['symbols']
+        self.symbols = symbols  # Store symbols as instance variable
         self.event_processor = AsyncEventProcessor(
             symbols=symbols,
             max_levels=self.config['features']['depth_levels']
@@ -642,34 +643,149 @@ class AsyncCryptoTradingPipeline:
             logger.error(f"Pipeline failed: {str(e)}")
             raise
 
+    def run_multi_period_analysis(self) -> dict:
+        """
+        Run comprehensive multi-period lead-lag analysis.
+        
+        This method leverages the new multi-period structure (DATA_0, DATA_1, DATA_2)
+        for robust temporal validation and pattern stability assessment.
+        """
+        logger.info("🚀 Starting multi-period lead-lag analysis")
+        
+        try:
+            # Import the multi-period analyzer
+            import sys
+            sys.path.append(str(Path(__file__).parent))
+            from async_processing.multi_period_lead_lag_analyzer import MultiPeriodLeadLagAnalyzer
+            
+            # Initialize multi-period analyzer
+            analyzer = MultiPeriodLeadLagAnalyzer(
+                data_dir=self.config['data']['raw_data_path'],
+                symbols=self.symbols,
+                max_lag_ms=self.config['lead_lag']['max_lag_ms'],
+                min_price_change=self.config['lead_lag']['min_price_change']
+            )
+            
+            # Run analysis across all periods
+            sample_size = self.config['data'].get('max_records_per_symbol', 100000)
+            results = analyzer.analyze_all_periods(
+                sample_size_per_period=sample_size,
+                save_results=True
+            )
+            
+            # Generate comprehensive report
+            report = analyzer.get_summary_report()
+            
+            # Log summary
+            logger.info("📊 Multi-Period Analysis Results:")
+            for period_id, signals in results.items():
+                logger.info(f"   {period_id}: {len(signals)} signals detected")
+            
+            # Log cross-period insights
+            if 'validation_metrics' in report['cross_period_analysis']:
+                val_metrics = report['cross_period_analysis']['validation_metrics']
+                logger.info("📈 Pattern Validation Metrics:")
+                logger.info(f"   Train→Validation persistence: {val_metrics.get('train_to_validation_persistence', 0):.2%}")
+                logger.info(f"   Validation→Test persistence: {val_metrics.get('validation_to_test_persistence', 0):.2%}")
+                logger.info(f"   Train→Test persistence: {val_metrics.get('train_to_test_persistence', 0):.2%}")
+            
+            # Generate visualization
+            try:
+                analyzer.plot_analysis_results(save_plots=True)
+                logger.info("📊 Analysis visualization saved")
+            except Exception as e:
+                logger.warning(f"Could not generate plots: {e}")
+            
+            return {
+                'multi_period_results': results,
+                'cross_period_analysis': report['cross_period_analysis'],
+                'analyzer': analyzer
+            }
+            
+        except Exception as e:
+            logger.error(f"Multi-period analysis failed: {e}")
+            import traceback
+            traceback.print_exc()
+            return {}
+
 def main():
-    """Main execution function."""
+    """Main function to run the async crypto trading pipeline."""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Async Crypto HFT Trading Pipeline')
+    parser.add_argument('--config', default='config/config.yaml', 
+                       help='Path to configuration file')
+    parser.add_argument('--max-records', type=int, default=None,
+                       help='Maximum records to load per symbol (for testing)')
+    parser.add_argument('--mode', choices=['standard', 'multi-period', 'both'], 
+                       default='standard',
+                       help='Analysis mode: standard pipeline, multi-period analysis, or both')
+    
+    args = parser.parse_args()
     
     # Initialize pipeline
-    pipeline = AsyncCryptoTradingPipeline()
+    pipeline = AsyncCryptoTradingPipeline(config_path=args.config)
     
-    # Run complete pipeline
-    results = pipeline.run_full_pipeline()
+    results = {}
     
-    # Print summary
-    print("\n" + "="*50)
-    print("ASYNC CRYPTO HFT BACKTEST RESULTS")
-    print("="*50)
+    if args.mode in ['standard', 'both']:
+        logger.info("🚀 Running standard pipeline analysis")
+        try:
+            standard_results = pipeline.run_full_pipeline(max_records=args.max_records)
+            results['standard_analysis'] = standard_results
+            
+            # Display standard results
+            print("\n" + "="*70)
+            print("STANDARD PIPELINE RESULTS - OUT-OF-SAMPLE PERFORMANCE")
+            print("="*70)
+            
+            oos_results = standard_results.get('out_of_sample_results', {})
+            
+            print(f"Initial Capital: ${oos_results.get('initial_capital', 0):,.2f}")
+            print(f"Final Value: ${oos_results.get('final_value', 0):,.2f}")
+            print(f"Net P&L: ${oos_results.get('net_pnl', 0):,.2f}")
+            print(f"Net Return: {oos_results.get('net_return', 0):.2%}")
+            print(f"Net Alpha (after costs): {oos_results.get('net_alpha', 0):.2%}")
+            print(f"Sharpe Ratio: {oos_results.get('sharpe_ratio', 0):.3f}")
+            print(f"Maximum Drawdown: {oos_results.get('max_drawdown', 0):.2%}")
+            print(f"Number of Trades: {oos_results.get('num_trades', 0)}")
+            print(f"Total Transaction Costs: ${oos_results.get('total_transaction_costs', 0):,.2f}")
+            print(f"Cost Ratio: {oos_results.get('cost_ratio', 0):.3%}")
+            
+        except Exception as e:
+            logger.error(f"Standard pipeline failed: {e}")
     
-    oos_results = results.get('out_of_sample_results', {})
+    if args.mode in ['multi-period', 'both']:
+        logger.info("🔍 Running multi-period analysis")
+        try:
+            multi_period_results = pipeline.run_multi_period_analysis()
+            results['multi_period_analysis'] = multi_period_results
+            
+            # Display multi-period results
+            if multi_period_results:
+                print("\n" + "="*70)
+                print("MULTI-PERIOD LEAD-LAG ANALYSIS RESULTS")
+                print("="*70)
+                
+                period_results = multi_period_results.get('multi_period_results', {})
+                for period_id, signals in period_results.items():
+                    print(f"{period_id}: {len(signals)} lead-lag signals detected")
+                
+                cross_analysis = multi_period_results.get('cross_period_analysis', {})
+                if 'validation_metrics' in cross_analysis:
+                    val_metrics = cross_analysis['validation_metrics']
+                    print(f"\nPattern Validation Metrics:")
+                    print(f"  Train→Validation persistence: {val_metrics.get('train_to_validation_persistence', 0):.2%}")
+                    print(f"  Validation→Test persistence: {val_metrics.get('validation_to_test_persistence', 0):.2%}")
+                    print(f"  Train→Test persistence: {val_metrics.get('train_to_test_persistence', 0):.2%}")
+            
+        except Exception as e:
+            logger.error(f"Multi-period analysis failed: {e}")
     
-    print(f"Initial Capital: ${oos_results.get('initial_capital', 0):,.2f}")
-    print(f"Final Value: ${oos_results.get('final_value', 0):,.2f}")
-    print(f"Net P&L: ${oos_results.get('net_pnl', 0):,.2f}")
-    print(f"Net Return: {oos_results.get('net_return', 0):.2%}")
-    print(f"Net Alpha (after costs): {oos_results.get('net_alpha', 0):.2%}")
-    print(f"Sharpe Ratio: {oos_results.get('sharpe_ratio', 0):.3f}")
-    print(f"Maximum Drawdown: {oos_results.get('max_drawdown', 0):.2%}")
-    print(f"Number of Trades: {oos_results.get('num_trades', 0)}")
-    print(f"Total Transaction Costs: ${oos_results.get('total_transaction_costs', 0):,.2f}")
-    print(f"Cost Ratio: {oos_results.get('cost_ratio', 0):.3%}")
+    print("\n" + "="*70)
+    logger.info("✅ Pipeline execution completed")
     
-    print("\n" + "="*50)
+    return results
 
 if __name__ == "__main__":
     main()

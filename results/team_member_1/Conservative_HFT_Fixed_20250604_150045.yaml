@@ -1,0 +1,415 @@
+in_sample_analysis:
+  signal_count: 20
+  signal_stats:
+    avg_confidence: !!python/object/apply:numpy.core.multiarray.scalar
+    - &id001 !!python/object/apply:numpy.dtype
+      args:
+      - f8
+      - false
+      - true
+      state: !!python/tuple
+      - 3
+      - <
+      - null
+      - null
+      - null
+      - -1
+      - -1
+      - 0
+    - !!binary |
+      twPemj3x1D8=
+    avg_lag_ms: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      o73BFybHj0A=
+    avg_strength: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AI74u4W50j8=
+    confidence_distribution:
+      q25: !!python/object/apply:numpy.core.multiarray.scalar
+      - *id001
+      - !!binary |
+        NXgoCQcdzT8=
+      q50: !!python/object/apply:numpy.core.multiarray.scalar
+      - *id001
+      - !!binary |
+        m7L5e6Dl0z8=
+      q75: !!python/object/apply:numpy.core.multiarray.scalar
+      - *id001
+      - !!binary |
+        smrj9b+B1j8=
+      q95: !!python/object/apply:numpy.core.multiarray.scalar
+      - *id001
+      - !!binary |
+        K6ZdmoQX4j8=
+    count: 20
+    std_confidence: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      0bT1LbcZwD8=
+out_of_sample_results:
+  avg_trade_value: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EgoI7zbYokA=
+  cost_ratio: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cLxC7+JK+T4=
+  final_value: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    PMBUFZpl+EA=
+  gross_pnl: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ABD/rKqXUcA=
+  gross_return: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZED2xwsPR78=
+  initial_capital: 100000
+  max_drawdown: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XoEPL91gOb8=
+  net_alpha: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZED2xwsPR78=
+  net_pnl: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ABD/rKqXUcA=
+  net_return: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZED2xwsPR78=
+  num_trades: 4
+  portfolio_values:
+  - !!python/tuple
+    - !!python/object/apply:pandas._libs.tslibs.timestamps._unpickle_timestamp
+      - 1748521172840914965
+      - null
+      - null
+      - 10
+    - !!python/object/apply:numpy.core.multiarray.scalar
+      - *id001
+      - !!binary |
+        TAD2eQVo+EA=
+  - !!python/tuple
+    - &id006 !!python/object/apply:pandas._libs.tslibs.timestamps._unpickle_timestamp
+      - 1748523002216957092
+      - null
+      - null
+      - 10
+    - !!python/object/apply:numpy.core.multiarray.scalar
+      - *id001
+      - !!binary |
+        PMBUFZpl+EA=
+  sharpe_ratio: 0.0
+  signal_performance:
+  - base_follower: XBT_EUR
+    confidence: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      D549IH0hyT8=
+    confidence_multiplier: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      RVOzR/t96j8=
+    feature_type: periodic_test
+    follower: XBT_EUR
+    leader: ETH_EUR
+    order_timestamp: &id002 !!python/object/apply:pandas._libs.tslibs.timestamps._unpickle_timestamp
+    - 1748517843274116039
+    - null
+    - null
+    - 10
+    position_value: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      1zmEsv9XlUA=
+    side: buy
+    signal_strength: 0.5
+    signal_timestamp: *id002
+    strength_multiplier: 0.6
+    type_multiplier: 0.5
+  - base_follower: XBT_EUR
+    confidence: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      8vFyi6yE1j8=
+    confidence_multiplier: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      b65Prtcl9D8=
+    feature_type: microstructure
+    follower: XBT_EUR
+    leader: ETH_EUR
+    order_timestamp: &id003 !!python/object/apply:pandas._libs.tslibs.timestamps._unpickle_timestamp
+    - 1748518805574377060
+    - null
+    - null
+    - 10
+    position_value: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      TwhrqK3RrEA=
+    side: buy
+    signal_strength: 1.0
+    signal_timestamp: *id003
+    strength_multiplier: 1.2
+    type_multiplier: 0.9
+  - base_follower: XBT_EUR
+    confidence: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      89vc25x41D8=
+    confidence_multiplier: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      8BLUEsSW8T8=
+    feature_type: microstructure
+    follower: XBT_EUR
+    leader: ETH_EUR
+    order_timestamp: &id004 !!python/object/apply:pandas._libs.tslibs.timestamps._unpickle_timestamp
+    - 1748519650198308945
+    - null
+    - null
+    - 10
+    position_value: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      rPYB/c/zoEA=
+    side: buy
+    signal_strength: 0.7
+    signal_timestamp: *id004
+    strength_multiplier: 0.84
+    type_multiplier: 0.9
+  - base_follower: XBT_EUR
+    confidence: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      89vc25x41D8=
+    confidence_multiplier: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      8BLUEsSW8T8=
+    feature_type: microstructure
+    follower: XBT_EUR
+    leader: ETH_EUR
+    order_timestamp: &id005 !!python/object/apply:pandas._libs.tslibs.timestamps._unpickle_timestamp
+    - 1748519781202524900
+    - null
+    - null
+    - 10
+    position_value: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      U1qoQGfuokA=
+    side: buy
+    signal_strength: 0.8
+    signal_timestamp: *id005
+    strength_multiplier: 0.96
+    type_multiplier: 0.9
+  total_commissions: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    J6zEQP7f/j8=
+  total_slippage: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gCJCFpnf3j8=
+  total_transaction_costs: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZJoqQ/JLA0A=
+  trades_log:
+  - capital_after: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      4fteipoU+EA=
+    commission: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      9Acn5lR80T8=
+    price: 96318.21566999999
+    quantity: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      EXIjk+cLjT8=
+    side: buy
+    slippage: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      e6LXmht8sT8=
+    symbol: XBT_EUR
+    timestamp: *id002
+    value: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      NaXyokVYlUA=
+  - capital_after: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      6+aVW/4t90A=
+    commission: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      YN3Iphic5z8=
+    price: 96492.22437
+    quantity: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      gGeItQ2Toz8=
+    side: buy
+    slippage: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      F+h6Ssubxz8=
+    symbol: XBT_EUR
+    timestamp: *id003
+    value: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      OzKYFwzSrEA=
+  - capital_after: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      hTCbLVem9kA=
+    commission: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      xK8+SbTG2z8=
+    price: 96493.924455
+    quantity: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      517SaEEHlz8=
+    side: buy
+    slippage: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      4N0NRlnGuz8=
+    symbol: XBT_EUR
+    timestamp: *id004
+    value: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      x4K0iQf0oEA=
+  - capital_after: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      +b0gQtoO9kA=
+    commission: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      JT4bhr4E3z8=
+    price: 96487.22412
+    quantity: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      YTYaP9+3mT8=
+    side: buy
+    slippage: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      dzkt41gEvz8=
+    symbol: XBT_EUR
+    timestamp: *id005
+    value: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      riBaSaXuokA=
+  win_rate: 0.0
+strategy_performance:
+  annualized_return: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YmfWmM+yxr8=
+  calmar_ratio: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    6JRt1vGefMA=
+  max_drawdown: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    XoEPL91gOb8=
+  profit_factor: .inf
+  sharpe_ratio: 0.0
+  total_return: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZED2xwsPR78=
+  volatility: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    AAAAAAAAAAA=
+  win_rate: 0.0
+temporal_splits:
+  in_sample_end: &id008 !!python/object/apply:pandas._libs.tslibs.timestamps._unpickle_timestamp
+  - 1748512673875171927
+  - null
+  - null
+  - 10
+  in_sample_start: !!python/object/apply:pandas._libs.tslibs.timestamps._unpickle_timestamp
+  - 1748488574411006927
+  - null
+  - null
+  - 10
+  out_sample_end: *id006
+  out_sample_start: &id007 !!python/object/apply:pandas._libs.tslibs.timestamps._unpickle_timestamp
+  - 1748517838046064927
+  - null
+  - null
+  - 10
+  validation_end: *id007
+  validation_start: *id008
+transaction_cost_analysis:
+  cost_per_trade: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZJoqQ/JL4z8=
+  cost_ratio: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    cLxC7+JK+T4=
+  net_alpha_after_costs: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZED2xwsPR78=
+  total_commissions: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    J6zEQP7f/j8=
+  total_costs: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    ZJoqQ/JLA0A=
+  total_slippage: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    gCJCFpnf3j8=
+validation_results:
+  best_sharpe: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    CZojWKv00T8=
+  best_threshold: 0.3
+  optimization_results:
+  - avg_return: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      oQL76k1WJj8=
+    sharpe: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      CZojWKv00T8=
+    signal_count: 12
+    threshold: 0.3
+    volatility: !!python/object/apply:numpy.core.multiarray.scalar
+    - *id001
+    - !!binary |
+      rN81b3fnQz8=

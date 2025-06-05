@@ -29,6 +29,7 @@ class LeadLagSignal:
     confidence: float  # 0 to 1, confidence in the signal
     lag_microseconds: int  # Lag time in microseconds
     feature_type: str  # Type of feature that triggered the signal
+    period_id: Optional[str] = None  # Period identifier (DATA_0, DATA_1, DATA_2)
     
 class AsyncLeadLagDetector:
     """
@@ -75,7 +76,8 @@ class AsyncLeadLagDetector:
     
     def process_event_stream(self, event_processor: AsyncEventProcessor,
                            start_time: Optional[datetime] = None,
-                           end_time: Optional[datetime] = None) -> List[LeadLagSignal]:
+                           end_time: Optional[datetime] = None,
+                           period_id: Optional[str] = None) -> List[LeadLagSignal]:
         """
         Process event stream and detect lead-lag relationships with progress tracking.
         
@@ -86,6 +88,7 @@ class AsyncLeadLagDetector:
             event_processor: Async event processor with loaded events
             start_time: Start time for analysis
             end_time: End time for analysis
+            period_id: Optional period identifier (DATA_0, DATA_1, DATA_2)
             
         Returns:
             List of detected lead-lag signals
@@ -93,7 +96,8 @@ class AsyncLeadLagDetector:
         import time
         start_processing_time = time.time()
         
-        logger.info("🔍 Starting async lead-lag detection")
+        period_info = f" (Period: {period_id})" if period_id else ""
+        logger.info(f"🔍 Starting async lead-lag detection{period_info}")
         logger.info("   IMPORTANT: No timestamp synchronization - pure event-driven analysis!")
         
         # Try to import tqdm for progress tracking
@@ -109,15 +113,16 @@ class AsyncLeadLagDetector:
         
         # Get total event count for progress tracking
         total_events = len([e for e in event_processor.get_event_iterator(start_time, end_time)])
-        logger.info(f"📊 Processing {total_events:,} events for lead-lag analysis")
+        logger.info(f"📊 Processing {total_events:,} events for lead-lag analysis{period_info}")
         
-        # Create progress bar
+        # Create progress bar with period information
+        desc = f"Lead-lag analysis{f' ({period_id})' if period_id else ''}"
         if TQDM_AVAILABLE:
             event_iterator = tqdm(event_processor.get_event_iterator(start_time, end_time),
                                 total=total_events,
-                                desc="Analyzing lead-lag patterns",
+                                desc=desc,
                                 unit="event",
-                                postfix={'signals': 0, 'signal_rate': 0})
+                                postfix={'signals': 0, 'signal_rate': 0, 'period': period_id or 'N/A'})
         else:
             event_iterator = event_processor.get_event_iterator(start_time, end_time)
         
@@ -136,7 +141,7 @@ class AsyncLeadLagDetector:
             self._update_feature_buffers(event.symbol, event.timestamp, features)
             
             # Detect lead-lag relationships
-            new_signals = self._detect_lead_lag_patterns(event.timestamp)
+            new_signals = self._detect_lead_lag_patterns(event.timestamp, period_id)
             
             # Filter out duplicate signals
             unique_signals = []
@@ -145,6 +150,10 @@ class AsyncLeadLagDetector:
                     unique_signals.append(signal)
                 else:
                     self.detection_stats['duplicates_filtered'] += 1
+            
+            # Add period metadata to signals
+            for signal in unique_signals:
+                signal.period_id = period_id
             
             self.lead_lag_signals.extend(unique_signals)
             signals_detected += len(unique_signals)
@@ -175,7 +184,14 @@ class AsyncLeadLagDetector:
         logger.info(f"   Signals detected: {len(self.lead_lag_signals):,}")
         logger.info(f"   Processing time: {total_time:.2f}s")
         logger.info(f"   Processing speed: {processing_speed:,.0f} events/second")
-        logger.info(f"   Signal detection rate: {(len(self.lead_lag_signals)/event_count)*100:.4f}% of events")
+        
+        # Only calculate signal detection rate if we processed events
+        if event_count > 0:
+            signal_rate = (len(self.lead_lag_signals)/event_count)*100
+            logger.info(f"   Signal detection rate: {signal_rate:.4f}% of events")
+        else:
+            logger.info("   Signal detection rate: N/A (no events processed)")
+            
         logger.info("🎯 Asynchronous lead-lag analysis completed - no temporal binning used!")
         
         return self.lead_lag_signals
@@ -272,7 +288,7 @@ class AsyncLeadLagDetector:
         self.recent_signals[signal_hash] = signal.timestamp
         return False
     
-    def _detect_lead_lag_patterns(self, current_time: datetime) -> List[LeadLagSignal]:
+    def _detect_lead_lag_patterns(self, current_time: datetime, period_id: Optional[str] = None) -> List[LeadLagSignal]:
         """Detect lead-lag patterns across symbol pairs or within single symbol features."""
         signals = []
         
@@ -298,7 +314,49 @@ class AsyncLeadLagDetector:
                 intra_signals = self._detect_intra_symbol_lead_lag(symbol, current_time)
                 signals.extend(intra_signals)
         
+        # Apply period-specific filters or enhancements
+        if period_id:
+            signals = self._apply_period_specific_filters(signals, period_id)
+        
         return signals
+    
+    def _apply_period_specific_filters(self, signals: List[LeadLagSignal], period_id: str) -> List[LeadLagSignal]:
+        """
+        Apply period-specific filters and enhancements to lead-lag signals.
+        
+        Different periods may require different sensitivity thresholds:
+        - DATA_0 (earliest): Higher confidence thresholds due to potential noise
+        - DATA_1 (middle): Balanced thresholds for validation
+        - DATA_2 (latest): More sensitive detection for recent patterns
+        """
+        if not signals:
+            return signals
+        
+        # Period-specific confidence thresholds
+        confidence_thresholds = {
+            'DATA_0': 0.7,  # Stricter for training data
+            'DATA_1': 0.6,  # Moderate for validation
+            'DATA_2': 0.5   # More sensitive for test data
+        }
+        
+        # Period-specific signal strength thresholds
+        strength_thresholds = {
+            'DATA_0': 0.3,  # Higher threshold for older data
+            'DATA_1': 0.25, # Moderate threshold
+            'DATA_2': 0.2   # Lower threshold for recent data
+        }
+        
+        min_confidence = confidence_thresholds.get(period_id, 0.6)
+        min_strength = strength_thresholds.get(period_id, 0.25)
+        
+        filtered_signals = []
+        for signal in signals:
+            if (signal.confidence >= min_confidence and 
+                abs(signal.signal_strength) >= min_strength):
+                filtered_signals.append(signal)
+        
+        logger.debug(f"Period {period_id}: Filtered {len(signals)} -> {len(filtered_signals)} signals")
+        return filtered_signals
     
     def _detect_price_lead_lag(self, symbol1: str, symbol2: str, 
                              current_time: datetime) -> List[LeadLagSignal]:
@@ -672,6 +730,33 @@ class AsyncLeadLagDetector:
         
         return stats
     
+    def get_period_statistics(self) -> Dict[str, Dict]:
+        """Get statistics grouped by period."""
+        period_stats = defaultdict(lambda: {
+            'signal_count': 0,
+            'avg_confidence': 0.0,
+            'avg_strength': 0.0,
+            'avg_lag_ms': 0.0,
+            'feature_types': defaultdict(int)
+        })
+        
+        for signal in self.lead_lag_signals:
+            if signal.period_id:
+                period_stats[signal.period_id]['signal_count'] += 1
+                period_stats[signal.period_id]['avg_confidence'] += signal.confidence
+                period_stats[signal.period_id]['avg_strength'] += abs(signal.signal_strength)
+                period_stats[signal.period_id]['avg_lag_ms'] += signal.lag_microseconds / 1000
+                period_stats[signal.period_id]['feature_types'][signal.feature_type] += 1
+        
+        # Calculate averages
+        for period_id, stats in period_stats.items():
+            if stats['signal_count'] > 0:
+                stats['avg_confidence'] /= stats['signal_count']
+                stats['avg_strength'] /= stats['signal_count']
+                stats['avg_lag_ms'] /= stats['signal_count']
+        
+        return dict(period_stats)
+
     def filter_signals_by_confidence(self, min_confidence: float = 0.5) -> List[LeadLagSignal]:
         """Filter signals by minimum confidence threshold."""
         return [s for s in self.lead_lag_signals if s.confidence >= min_confidence]

@@ -1,3 +1,10 @@
 
 telegram_integration/telegram_signal_extractor.py
 telegram_integration/telegram_trading_bridge.py
+data/raw/DATA_0/ETH_EUR.csv
+data/raw/DATA_0/XBT_EUR.csv
+data/raw/DATA_1/ETH_EUR.csv
+data/raw/DATA_1/XBT_EUR.csv
+data/raw/DATA_2/ETH_EUR.csv
+data/raw/DATA_2/XBT_EUR.csv
+data/raw/.DS_Store
