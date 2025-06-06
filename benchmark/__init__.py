@@ -9,4 +9,17 @@ Implements comprehensive benchmarking for lead-lag strategies:
 - Statistical significance testing
 """
 
-# Benchmark Framework
+from .backtesting import BacktestEngine
+from .strategies import BaseBenchmarkStrategy, BuyHoldStrategy, RandomStrategy, SimpleMomentumStrategy, MeanReversionStrategy
+from .metrics import PerformanceAnalyzer, PerformanceMetrics
+
+__all__ = [
+    'BacktestEngine',
+    'BaseBenchmarkStrategy',
+    'BuyHoldStrategy', 
+    'RandomStrategy',
+    'SimpleMomentumStrategy',
+    'MeanReversionStrategy',
+    'PerformanceAnalyzer',
+    'PerformanceMetrics'
+]

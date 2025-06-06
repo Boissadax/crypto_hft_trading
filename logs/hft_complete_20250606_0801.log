@@ -1,0 +1,22 @@
+2025-06-06 08:01:34,967 - __main__ - INFO - Initializing HFT Engine components...
+2025-06-06 08:01:34,967 - feature_engineering.synchronization - INFO - AsynchronousSync initialized for symbols: ['BTC', 'ETH']
+2025-06-06 08:01:34,967 - feature_engineering.time_series_features - INFO - TimeSeriesFeatureExtractor initialized with irregular index support
+2025-06-06 08:01:34,967 - feature_engineering.feature_engineer - INFO - FeatureEngineer initialized for symbols: ['BTC', 'ETH']
+2025-06-06 08:01:34,968 - __main__ - INFO - ✅ All components initialized successfully
+2025-06-06 08:01:34,968 - __main__ - INFO - 🚀 Starting complete HFT Engine v3 analysis...
+2025-06-06 08:01:34,968 - __main__ - INFO - 🔄 Loading data for dataset DATA_0...
+2025-06-06 08:01:34,968 - __main__ - INFO - Cache status: {'dataset': 'DATA_0', 'processed_dir': 'processed_data/DATA_0', 'exists': True, 'files': {'ETH_EUR': {'path': 'processed_data/DATA_0/ETH_EUR.parquet', 'size_mb': 67.91906070709229, 'modified': '2025-06-06T03:19:49.585363'}, 'XBT_EUR': {'path': 'processed_data/DATA_0/XBT_EUR.parquet', 'size_mb': 22.835131645202637, 'modified': '2025-06-06T03:19:54.188170'}}}
+2025-06-06 08:01:34,968 - data_cache - INFO - Using cached Parquet for ETH_EUR
+2025-06-06 08:01:34,968 - data_cache - INFO - Using cached Parquet for XBT_EUR
+2025-06-06 08:01:34,968 - data_cache - INFO - Data cache ready for dataset DATA_0
+2025-06-06 08:01:34,969 - __main__ - WARNING - ⚠️  No data found for BTC
+2025-06-06 08:01:35,436 - __main__ - INFO - ✅ Loaded ETH: 53,700,040 rows
+2025-06-06 08:01:35,436 - __main__ - INFO - ⚙️ Starting feature engineering...
+2025-06-06 08:01:35,436 - feature_engineering.feature_engineer - INFO - Starting chunked processing with chunk_size=100,000
+2025-06-06 08:01:35,437 - data_cache - INFO - Using cached Parquet for ETH_EUR
+2025-06-06 08:01:35,437 - data_cache - INFO - Using cached Parquet for XBT_EUR
+2025-06-06 08:01:35,437 - data_cache - INFO - Data cache ready for dataset DATA_0
+2025-06-06 08:01:35,437 - feature_engineering.synchronization - INFO - Cleared data for all symbols
+2025-06-06 08:01:35,437 - feature_engineering.feature_engineer - INFO - Processing ETH in chunks from processed_data/DATA_0/ETH_EUR.parquet
+2025-06-06 08:01:35,438 - feature_engineering.feature_engineer - INFO - ETH: 53,700,040 total events
+2025-06-06 08:01:43,227 - feature_engineering.feature_engineer - INFO - Processed row group 1/54 (1,048,576 events)

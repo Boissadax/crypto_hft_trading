@@ -545,3 +545,13 @@ class BacktestEngine:
             })
         
         return pd.DataFrame(comparison_data).set_index('Strategy')
+
+
+def _get_execution_price(self, order, book_snapshot):
+    """Return execution price depending on side, using book snapshot."""
+    if book_snapshot is None:
+        return order.price  # fall-back
+    if order.side.lower() == 'buy':
+        return book_snapshot.get('best_ask', order.price)
+    else:
+        return book_snapshot.get('best_bid', order.price)

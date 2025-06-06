@@ -17,11 +17,11 @@ from datetime import datetime, timedelta
 import warnings
 warnings.filterwarnings('ignore')
 
-from ..data_synchronization import DataSynchronizer
-from ..feature_engineering import FeatureEngineer
-from ..statistical_analysis import TransferEntropyAnalyzer, CausalityTester, RegimeDetector
-from ..learning import DataPreparator, ModelTrainer, TransferEntropyModel
-from ..benchmark import BaseBenchmarkStrategy, TradeSignal, SignalType
+from feature_engineering import FeatureEngineer, AsynchronousSync
+from statistical_analysis import TransferEntropyAnalyzer, CausalityTester, RegimeDetector
+from learning import DataPreparator, ModelTrainer
+from benchmark import BaseBenchmarkStrategy
+from benchmark.strategies import TradeSignal, SignalType
 
 @dataclass
 class LeadLagPair:
@@ -49,6 +49,8 @@ class TradingSignal:
     ml_prediction: Optional[float] = None
     regime: Optional[str] = None
     metadata: Dict[str, Any] = None
+
+from feature_engineering import AsynchronousSync
 
 class TransferEntropyStrategy(BaseBenchmarkStrategy):
     """
@@ -101,7 +103,7 @@ class TransferEntropyStrategy(BaseBenchmarkStrategy):
         self.use_regime_detection = use_regime_detection
         
         # Initialize components
-        self.synchronizer = DataSynchronizer()
+        self.synchronizer = AsynchronousSync()
         self.feature_engineer = FeatureEngineer()
         self.te_analyzer = TransferEntropyAnalyzer()
         self.causality_tester = CausalityTester()
