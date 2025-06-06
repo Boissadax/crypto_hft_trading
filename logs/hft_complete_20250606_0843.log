@@ -1,0 +1,16 @@
+2025-06-06 08:43:00,628 - __main__ - INFO - 🔧 Initializing HFT Engine components...
+2025-06-06 08:43:00,633 - feature_engineering.synchronization - INFO - AsynchronousSync initialized for symbols: ['BTC', 'ETH']
+2025-06-06 08:43:00,633 - feature_engineering.time_series_features - INFO - TimeSeriesFeatureExtractor initialized with irregular index support
+2025-06-06 08:43:00,633 - feature_engineering.feature_engineer - INFO - FeatureEngineer initialized for symbols: ['BTC', 'ETH']
+2025-06-06 08:43:00,634 - __main__ - INFO - ✅ All components initialized successfully
+2025-06-06 08:43:00,634 - __main__ - INFO - 🔄 Loading data for dataset DATA_1...
+2025-06-06 08:43:00,634 - __main__ - INFO - Cache status: {'dataset': 'DATA_1', 'processed_dir': 'processed_data/DATA_1', 'exists': False, 'files': {}}
+2025-06-06 08:43:00,634 - __main__ - ERROR - ❌ Data loading failed: Raw data directory not found: raw_data/DATA_1
+2025-06-06 08:43:20,121 - __main__ - INFO - 🔧 Initializing HFT Engine components...
+2025-06-06 08:43:20,126 - feature_engineering.synchronization - INFO - AsynchronousSync initialized for symbols: ['BTC', 'ETH']
+2025-06-06 08:43:20,126 - feature_engineering.time_series_features - INFO - TimeSeriesFeatureExtractor initialized with irregular index support
+2025-06-06 08:43:20,126 - feature_engineering.feature_engineer - INFO - FeatureEngineer initialized for symbols: ['BTC', 'ETH']
+2025-06-06 08:43:20,127 - __main__ - INFO - ✅ All components initialized successfully
+2025-06-06 08:43:20,127 - __main__ - INFO - 🔄 Loading data for dataset DATA_2...
+2025-06-06 08:43:20,127 - __main__ - INFO - Cache status: {'dataset': 'DATA_2', 'processed_dir': 'processed_data/DATA_2', 'exists': False, 'files': {}}
+2025-06-06 08:43:20,127 - data_cache - INFO - Converting ETH_EUR from CSV to Parquet (streaming)...

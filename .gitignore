@@ -1,3 +1,6 @@
 
 .DS_Store
 .DS_Store
+raw_data/DATA_2/ETH_EUR.csv
+raw_data/DATA_2/XBT_EUR.csv
+processed_data/DATA_2/ETH_EUR.parquet
